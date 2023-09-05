@@ -22,9 +22,9 @@ GIF Images
 
 ## 기술 스택
 
-| JavaScript | TypeScript |  React   |  Node   |
+| Python | Xgboost |  Tensorflow   |  Django   |
 | :--------: | :--------: | :------: | :-----: |
-|   ![js]    |   ![ts]    | ![react] | ![node] |
+|   ![python]    |   ![xgboost]    | ![tf] | ![Django] |
 
 <br>
 
@@ -54,7 +54,7 @@ MIT &copy; [NoHack](mailto:lbjp114@gmail.com)
 
 <!-- Stack Icon Refernces -->
 
-[js]: /images/stack/javascript.svg
-[ts]: /images/stack/typescript.svg
-[react]: /images/stack/react.svg
-[node]: /images/stack/node.svg
+[python]: /images/stack/python.svg
+[xgboost]: /images/stack/xgboost.svg
+[tf]: /images/stack/Tf.svg
+[Django]: /images/stack/django.svg
