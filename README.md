@@ -42,11 +42,21 @@
 
 ## 개발 환경
 
+### 개발 환경
 | Python | Xgboost |  Tensorflow   |  Django   |
 | :--------: | :--------: | :------: | :-----: |
 |   ![python]    |   ![xgboost]    | ![tf] | ![Django] |
 
 python == 3.8.10 에서 개발
+
+### 웹 구현 Tool
+| Component   | Specification           |
+|-------------|-------------------------|
+| Server      | AWS Light Sail 20.04 LTS, 8GB RAM |
+| DB          | MongoDB, SQLite3        |
+| Framework   | Django                  |
+| Map         | Google Map API          |
+
 
 ## 구현한 모델
 
