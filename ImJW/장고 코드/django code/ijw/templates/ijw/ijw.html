@@ -1,0 +1,197 @@
+{% block head %}
+    <!-- ... other head elements ... -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- jQuery 라이브러리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'ChosunCentennial';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/ChosunCentennial.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-style: skyblue;
+            
+        }
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: 'ChosunCentennial', Arial, sans-serif;
+            margin: 20px;
+            background-color: white;
+        }
+
+        /* 사이트 이름 스타일 */
+        h1 {
+            font-size: 36px;
+            color: #333;
+        }
+
+        /* 폼 요소 스타일 */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: 'ChosunCentennial', Arial, sans-serif;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        select {
+            margin: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: gray;
+            color: gray;
+            padding: 14px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: gray;
+        }
+
+        /* 예측 결과 스타일 */
+        .prediction-container {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <h1>시군구별 역전세 예측</h1>
+    <form action="{% url 'predict' %}" method="post">
+        {% csrf_token %}
+        
+        <!-- 연도 선택 -->
+        <label for="year">연도:</label>
+        <select name="year">
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+        
+        <!-- 월 선택 -->
+        <label for="month">월:</label>
+        <select name="month">
+            {% for month in months %}
+                <option value="{{ month }}">{{ month }}</option>
+            {% endfor %}
+        </select>
+        
+        <!-- 도 선택 -->
+        <label for="do">도:</label>
+        <select id="selected_do" name="do">
+            {% for do in dos %}
+                <option value="{{ do }}">{{ do }}</option>
+            {% endfor %}
+        </select>
+
+        
+        <!-- 시/군 선택 -->
+        <label for="sigun">시/군:</label>
+        <select id="selected_sigun" name="sigun">
+            {% for sigun in siguns %}
+                <option value="{{ sigun }}">{{ sigun }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- 읍/면/동 선택 -->
+        <label for="eup">읍/면/동:</label>
+        <select id="selected_eup" name="eup">
+            {% for eup in eups %}
+                <option value="{{ eup }}">{{ eup }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- 리 선택 -->
+        <label for="ri">리:</label>
+        <select id="selected_ri" name="ri">
+            {% for ri in ris %}
+                <option value="{{ ri }}">{{ ri }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="예측">
+    </form>
+
+    {% if prediction %}
+        <div>
+            <h2>예측 결과</h2>
+            <p>{{ prediction }}</p>
+            <!-- 추가적인 그래프 표시는 필요한 라이브러리 (예: Plotly 또는 D3.js)를 사용하여 여기에 삽입할 수 있습니다. -->
+            <!-- 예측 결과 아래에 추가 -->
+            <div id="plot-div"></div>
+        </div>
+    {% endif %}
+
+
+
+
+    {% if warning %}
+        <div style="color: red;">
+            <p>{{ warning }}</p>
+        </div>
+    {% endif %}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        
+        // Plotly 그래프 그리기
+
+        // Plotly 그래프 그리기
+        {% if plot %}
+            const plotData = JSON.parse("{{ plot|safe }}");
+            Plotly.newPlot('plot-div', plotData.data, plotData.layout);
+        {% endif %}
+        
+        function updateOptions(selectId, url, dependentSelectId, extraData) {
+            $(selectId).change(function() {
+                const selectedValue = $(this).val();
+                const dataToSend = {'selected_value': selectedValue};
+    
+                // extraData가 있으면 추가
+                if(extraData){
+                    Object.assign(dataToSend, extraData());
+                }
+    
+                $.ajax({
+                    url: url,
+                    data: dataToSend,
+                    success: function(data) {
+                        const dependentSelect = $(dependentSelectId);
+                        dependentSelect.empty();
+                        data.forEach(function(item) {
+                            dependentSelect.append($('<option>', {
+                                value: item,
+                                text: item
+                            }));
+                        });
+                    }
+                });
+            });
+        }
+    
+        // 도가 변경되면 시군을 업데이트
+        updateOptions('#selected_do', '/ijw/get_sigun/', '#selected_sigun');
+    
+        // 시군이 변경되면 읍/면/동을 업데이트
+        updateOptions('#selected_sigun', '/ijw/get_eup/', '#selected_eup', function(){
+            return {'selected_do': $('#selected_do').val()};
+        });
+    
+        // 읍/면/동이 변경되면 리를 업데이트
+        updateOptions('#selected_eup', '/ijw/get_ri/', '#selected_ri', function(){
+            return {'selected_do': $('#selected_do').val(), 'selected_sigun': $('#selected_sigun').val()};
+        });
+    </script>
+{% endblock %}
