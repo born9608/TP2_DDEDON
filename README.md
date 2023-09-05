@@ -59,23 +59,20 @@ XGBoost 기반 머신러닝을 통해 전세가율에 따라 위험도를 판단
 ### 모델 3 - KimWY 폴더
 LSTM 기반 딥러닝을 통해 과거 데이터로 다음 월의 면적당매매금 면적당보증금을 예측하는 회귀 모델
 
-<br>
-
 ## 대시보드 및 웹앱 링크
 
 [대시보드(스트림릿)](https://20230819.streamlit.app)
 
 [웹앱(장고)](http://3.35.70.239:8000/)
 
-## 발표 자료
+## 발표 자료 및 데이터 출처
 
 [PPT 및 발표영상](https://drive.google.com/drive/folders/1oZtuQKOwznLOpZv-ERYOgFKYAMNhzJov?usp=sharing)
 
+[도로교통부 실거래가 자료 제공 사이트](http://rtdown.molit.go.kr/)
 <p align="justify">
 
 </p>
-
-<br>
 
 ## 라이센스
 
