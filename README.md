@@ -53,7 +53,15 @@ LSTM 기반 딥러닝을 통해 과거 데이터로 다음 월의 면적당매�
 
 <br>
 
-## PPT
+## 대시보드 및 웹앱 링크
+
+[대시보드(스트림릿)](https://20230819.streamlit.app)
+
+[웹앱(장고)](http://3.35.70.239:8000/)
+
+## 발표 자료
+
+[PPT 및 발표영상](https://drive.google.com/drive/folders/1oZtuQKOwznLOpZv-ERYOgFKYAMNhzJov?usp=sharing)
 
 <p align="justify">
 
